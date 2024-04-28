@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
-import { dirname } from 'path';
-import { mkdir, writeFile } from 'fs/promises';
+//import { dirname } from 'path';
+//import { mkdir, writeFile } from 'fs/promises';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import retry from 'async-retry';
@@ -100,10 +100,11 @@ const baseFetchAssetFile = async (
     console.log(text);
     throw new Error('Invalid response');
   }
-  const blob = await response.blob();
-  const arrayBuffer = await blob.arrayBuffer();
-  await mkdir(dirname(outputPath), { recursive: true });
-  void (await writeFile(outputPath, new Uint8Array(arrayBuffer)));
+  //const blob = await response.blob();
+  
+  //const arrayBuffer = await blob.arrayBuffer();
+  //await mkdir(dirname(outputPath), { recursive: true });
+  //void (await writeFile(outputPath, new Uint8Array(arrayBuffer)));
 };
 
 const fetchAssetFile = (
