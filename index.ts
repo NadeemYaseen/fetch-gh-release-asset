@@ -4,7 +4,6 @@ import { mkdir, writeFile } from 'fs/promises';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import retry from 'async-retry';
-import type { Context } from '@actions/github/lib/context';
 import type { HeadersInit } from 'node-fetch';
 import fetch from 'node-fetch';
 
@@ -13,9 +12,9 @@ interface GetRepoResult {
   readonly repo: string;
 }
 
-const getRepo = (inputRepoString: string, context: Context): GetRepoResult => {
+const getRepo = (inputRepoString: string): GetRepoResult => {
   if (inputRepoString === '') {
-    return { owner: context.repo.owner, repo: context.repo.repo };
+    throw new Error('Input Repo not provided');
   } else {
     const [owner, repo] = inputRepoString.split('/');
     if (typeof owner === 'undefined' || typeof repo === 'undefined')
@@ -98,7 +97,7 @@ const baseFetchAssetFile = async (
   const response = await fetch(url, { body, headers, method });
   if (!response.ok) {
     const text = await response.text();
-    core.warning(text);
+    console.warning(text);
     throw new Error('Invalid response');
   }
   const blob = await response.blob();
@@ -117,9 +116,9 @@ const fetchAssetFile = (
   });
 
 const printOutput = (release: GetReleaseResult): void => {
-  core.setOutput('version', release.data.tag_name);
-  core.setOutput('name', release.data.name);
-  core.setOutput('body', release.data.body);
+  console.log('version', release.data.tag_name);
+  console.log('name', release.data.name);
+  console.log('body', release.data.body);
 };
 
 const filterByFileName = (file: string) => (asset: Asset) =>
@@ -130,15 +129,14 @@ const filterByRegex = (file: string) => (asset: Asset) =>
 
 const main = async (): Promise<void> => {
   const { owner, repo } = getRepo(
-    core.getInput('repo', { required: false }),
-    github.context
+    'RapidSilicon/SpicaProduct'
   );
-  const token = core.getInput('token', { required: false });
-  const version = core.getInput('version', { required: false }) || 'latest';
-  const inputTarget = core.getInput('target', { required: false });
-  const file = core.getInput('file', { required: true });
-  const usesRegex = core.getBooleanInput('regex', { required: false });
-  const target = inputTarget === '' ? file : inputTarget;
+  const token = 'kkk';
+  const version = 'latest';
+  const inputTarget = 'lll';
+  const file = 'generic-1.2.1.tar.gz';
+  const usesRegex = false;
+  const target = 'generic-1.2.1.tar.gz';
   const baseUrl =
     core.getInput('octokitBaseUrl', { required: false }) || undefined;
 
