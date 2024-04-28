@@ -97,7 +97,7 @@ const baseFetchAssetFile = async (
   const response = await fetch(url, { body, headers, method });
   if (!response.ok) {
     const text = await response.text();
-    console.warning(text);
+    console.log(text);
     throw new Error('Invalid response');
   }
   const blob = await response.blob();
@@ -133,7 +133,7 @@ const main = async (): Promise<void> => {
   );
   const token = 'kkk';
   const version = 'latest';
-  const inputTarget = 'lll';
+  //const inputTarget = 'lll';
   const file = 'generic-1.2.1.tar.gz';
   const usesRegex = false;
   const target = 'generic-1.2.1.tar.gz';
